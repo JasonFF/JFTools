@@ -1,0 +1,21 @@
+{
+  "miniprogramRoot": "./dist",
+  "projectname": "JFTools",
+  "description": "",
+  "appid": "wxfcfd777b1d9067c5",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "networkTimeout": {
+    "request": 30000,
+    "downloadFile": 30000
+  },
+  "compileType": "miniprogram",
+  "cloudfunctionRoot": "./functions/",
+  "window": {
+    "backgroundColor": "#333"
+  }
+}
