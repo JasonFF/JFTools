@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./dist",
   "projectname": "JFTools",
-  "description": "",
+  "description": "JF的工具箱，用于理财信息的查询，理财的信息的计算和参考。",
   "appid": "wxfcfd777b1d9067c5",
   "setting": {
     "urlCheck": true,

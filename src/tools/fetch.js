@@ -3,7 +3,7 @@ wx.cloud.init({
 })
 
 export default function fetch(url, options) {
-  const {params, cheerio} = options || {}
+  const {params, cheerio, method, formData, headers} = options || {}
   let addParams = ''
   if (params) {
     addParams = '?'
@@ -16,7 +16,10 @@ export default function fetch(url, options) {
         name: 'proxy',
         data: {
           url: url+addParams,
-          cheerio
+          cheerio,
+          method,
+          formData,
+          headers
         }
       }).then(res => {
         try {

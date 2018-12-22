@@ -24,12 +24,15 @@ function parseContent(content) {
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const {url, cheerio} = event
+  const {url, cheerio, formData, method, headers} = event
   return await new Promise(resolve => {
     request({
+      formData,
+      method,
       url,
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36",
+        ...headers
       },
       timeout: 10000
         

@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import {View, Text} from '@tarojs/components'
-import { AtList, AtListItem, AtCard, AtButton } from "taro-ui"
+import { AtList, AtListItem, AtCard, AtButton, AtTabBar } from "taro-ui"
 import fetch from '../../tools/fetch'
 import './index.less'
 import 'taro-ui/dist/weapp/css/index.css'
@@ -156,17 +156,25 @@ class Index extends Component {
   }
 
   getQcOtc() {
-    return Promise.all([_getQcOtc(1), _getQcOtc(2)]).then(res => {
+    return Promise.all([_getQcOtc(1), sleep(1000).then(() => _getQcOtc(2))]).then(res => {
       this.setState({
         qcOtc: res
       })
     })
   }
 
+  toPage(page) {
+    if (page == 1) {
+      wx.redirectTo({
+        url: '/pages/stress/stress'
+      })
+    }
+  }
+
   render () {
     console.log(this.state)
     return (
-      <View>
+      <View style={{paddingBottom: '15vh', backgroundColor: '#333'}}>
         <AtList>
           <AtListItem title='usdt-qc' onClick={this.getUsdtQcData} extraText={`${this.state.usdtQc.ask} / ${this.state.usdtQc.bid}`} />
           <AtListItem title='qc-otc' onClick={this.getQcOtc} extraText={`${this.state.qcOtc[0]} / ${this.state.qcOtc[1]}`} />
@@ -237,9 +245,20 @@ class Index extends Component {
             </View>
           </View>
         </AtCard>
-        <AtButton onClick={this.updateData} type='primary'>刷新数据</AtButton>
-      </View>  
-      
+        <View style="padding: 3vh 0" >
+          <AtButton onClick={this.updateData} type='primary'>刷新数据</AtButton>
+        </View>
+        
+        <AtTabBar
+          fixed
+          tabList={[
+            { title: 'otc', iconType: 'shopping-cart'},
+            { title: 'stress', iconType: 'analytics'}
+          ]}
+          onClick={this.toPage.bind(this)}
+          current={0}
+        />
+      </View>
     )
   }
 }

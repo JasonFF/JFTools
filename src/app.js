@@ -20,13 +20,14 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/index/index'
+      'pages/index/index',
+      'pages/stress/stress'
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarBackgroundColor: '#333',
+      navigationBarTitleText: 'JFTools',
+      navigationBarTextStyle: 'white'
     }
   }
 
