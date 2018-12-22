@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import {View, Text} from '@tarojs/components'
 import { AtList, AtListItem, AtCard, AtButton, AtTabBar } from "taro-ui"
 
-import * as Echarts from '../../ec-canvas/echarts'
+import barchartTest from '../../components/bar-chart/bar-chart'
 import fetch from '../../tools/fetch'
 import './stress.less'
 import 'taro-ui/dist/weapp/css/index.css'
@@ -63,7 +63,7 @@ function getStepObj(kline) {
   return stepObj
 }
 
-function getKline() {
+function getKline(period) {
   return fetch('https://www.aicoin.net.cn/api/chart/kline/data/period', {
     headers: {
       "referer": "https://www.aicoin.net.cn/chart/bitmex-xbt"
@@ -71,20 +71,23 @@ function getKline() {
     method: 'POST',
     formData: {
       symbol: 'xbt:bitmex',
-      period: 5
+      period,
     }
   }).then(res => res.data.kline_data)
 }
 
-function initChart(canvas, width, height) {
-  return getKline().then(kline => {
-    const stepObj = getStepObj(kline)
-    const chart = Echarts.init(canvas, null, {
-      width: width,
-      height: height
-    });
-    canvas.setChart(chart);
+// function initChart(canvas, width, height) {
+//   const chart = Echarts.init(canvas, null, {
+//     width: width,
+//     height: height
+//   });
+//   canvas.setChart(chart);
+//   return chart;
+// }
 
+function getOption(period) {
+  return getKline(period).then(kline => {
+    const stepObj = getStepObj(kline)
     let nowPrice = kline[kline.length -1][4]
     let xAxisData = Object.values(stepObj).map(item => {
       return item.perPrice
@@ -135,8 +138,7 @@ function initChart(canvas, width, height) {
         },
       }]
     }
-    chart.setOption(option);
-    return chart;
+    return option
   })
 }
 
@@ -149,36 +151,74 @@ class Index extends Component {
       "backgroundTextStyle": "light",
       "navigationBarTitleText": 'zb',
       "usingComponents": {
-        'ec-canvas': '../../ec-canvas/ec-canvas' // 书写第三方组件的相对路径
+        'ec-canvas': '../../components/ec-canvas/ec-canvas', // 书写第三方组件的相对路径
+        "bar-chart": '../../components/bar-chart/bar-chart'
       }
 
   }
   state = {
-    ec: {
-      onInit: initChart
-    }
+    period: 1,
+    periodList: [
+      1,
+      3,
+      5,
+      15,
+      30,
+      60,
+      120,
+      240
+    ]
   }
 
   componentWillMount () {
 
   }
 
+  getChart(val) {
+    console.log(val)
+  }
+
+  choosePeriod(e) {
+    let period = e._relatedInfo.anchorRelatedText.replace('min', '')
+    getOption(period).then(option => {
+      this.setState({
+        chartOption: option
+      })
+    })
+  }
+
   toPage(page) {
     if (page == 0) {
-      wx.redirectTo({
+      return wx.redirectTo({
         url: '/pages/index/index'
       })
     }
-    
+    if (page.currentTarget.dataset.eTapAA == 0) {
+      return wx.redirectTo({
+        url: '/pages/index/index'
+      })
+    }
   }
 
   render () {
     console.log(this.state)
     return (
       <View style="background-color: #333; min-height: 100vh">
-      <View style="width: 100vw;height: 80vh; background-color: #eee">
-      <ec-canvas  id="mychart-dom-bar" canvas-id="mychart-bar" ec={ this.state.ec }></ec-canvas>
-      </View>
+        <View className='at-row at-row--wrap btnList'>
+        {
+          this.state.periodList.map(it => {
+            return (
+              <View className='at-col' key={it}>
+                <AtButton onClick={this.choosePeriod.bind(this)} size="small" type='primary'>{it}min</AtButton>
+              </View>
+            )
+          })
+        }
+        </View>
+        <View style="width: 100vw;height: 80vh; background-color: #eee">
+          <bar-chart option={this.state.chartOption}></bar-chart>
+          {/* <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec={ this.state.ec }></ec-canvas> */}
+        </View>
         
         <AtTabBar
           fixed

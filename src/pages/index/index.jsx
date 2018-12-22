@@ -164,8 +164,14 @@ class Index extends Component {
   }
 
   toPage(page) {
+    console.log(page)
     if (page == 1) {
-      wx.redirectTo({
+      return wx.redirectTo({
+        url: '/pages/stress/stress'
+      })
+    }
+    if (page.currentTarget.dataset.eTapAA == 1) {
+      return wx.redirectTo({
         url: '/pages/stress/stress'
       })
     }
