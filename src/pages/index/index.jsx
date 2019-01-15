@@ -107,12 +107,14 @@ class Index extends Component {
     this.getUsdtQcData()
     this.getQcOtc()
     this.getHbOtc()
+    this.getPaxUsdtData()
   }
   updateData() {
     this.getHl()
     this.getUsdtQcData()
     this.getQcOtc()
     this.getHbOtc()
+    this.getPaxUsdtData()
   }
 
   getHbOtc() {
@@ -131,7 +133,13 @@ class Index extends Component {
     }
   }
 
-  
+  getPaxUsdtData() {
+    return fetch('http://api.zb.cn/data/v1/ticker?market=pax_usdt').then(res => {
+      this.setState({
+        paxUsdt: res.ticker.last
+      })
+    })
+  }
 
   getUsdtQcData() {
     return fetch('http://api.zb.cn/data/v1/depth?market=usdt_qc&size=100').then(res => {
@@ -173,6 +181,7 @@ class Index extends Component {
 
   render () {
     console.log(this.state)
+    const trueUsdtQc = [this.state.hl / this.state.qcOtc[0] / this.state.paxUsdt, this.state.hl / this.state.qcOtc[1] / this.state.paxUsdt]
     return (
       <View style={{paddingBottom: '15vh', backgroundColor: '#333'}}>
         <AtList>
@@ -180,6 +189,8 @@ class Index extends Component {
           <AtListItem title='qc-otc' onClick={this.getQcOtc} extraText={`${this.state.qcOtc[0]} / ${this.state.qcOtc[1]}`} />
           {/* <AtListItem title='usdt-husd' extraText={`${this.state.usdthusd.ask} / ${this.state.usdthusd.bid}`} /> */}
           <AtListItem title='usd-cny' onClick={this.getHl} extraText={this.state.hl} />
+          <AtListItem title='pax-usdt' onClick={this.getPaxUsdtData} extraText={this.state.paxUsdt} />
+          <AtListItem title='usdt-qc-true' extraText={`${trueUsdtQc[0].toFixed(4)} / ${trueUsdtQc[1].toFixed(4)}`} />
         </AtList>
         <AtCard
          isFull
