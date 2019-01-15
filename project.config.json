@@ -1,21 +1,24 @@
 {
-  "miniprogramRoot": "./dist",
-  "projectname": "JFTools",
-  "description": "JF的工具箱，用于理财信息的查询，理财的信息的计算和参考。",
-  "appid": "wxfcfd777b1d9067c5",
-  "setting": {
-    "urlCheck": true,
-    "es6": false,
-    "postcss": false,
-    "minified": false
-  },
-  "networkTimeout": {
-    "request": 30000,
-    "downloadFile": 30000
-  },
-  "compileType": "miniprogram",
-  "cloudfunctionRoot": "./functions/",
-  "window": {
-    "backgroundColor": "#333"
-  }
+	"miniprogramRoot": "dist/",
+	"projectname": "JFTools",
+	"description": "JF的工具箱，用于理财信息的查询，理财的信息的计算和参考。",
+	"appid": "wxfcfd777b1d9067c5",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"networkTimeout": {
+		"request": 30000,
+		"downloadFile": 30000
+	},
+	"compileType": "miniprogram",
+	"cloudfunctionRoot": "functions/",
+	"window": {
+		"backgroundColor": "#333"
+	},
+	"libVersion": "2.4.2",
+	"condition": {}
 }
